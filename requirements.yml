@@ -1,0 +1,22 @@
+#
+- cloud3rsio.certbot
+- cloud3rsio.common_packages
+- cloud3rsio.hostname
+- cloud3rsio.httpd
+- cloud3rsio.iptables
+- cloud3rsio.journald
+- cloud3rsio.kernel_params
+- cloud3rsio.logrotate_rules
+- cloud3rsio.os_user
+- cloud3rsio.php
+- cloud3rsio.phpbuild
+- cloud3rsio.proftpd
+- cloud3rsio.selinux
+- cloud3rsio.swapfile
+- cloud3rsio.time
+- cloud3rsio.update_all_packages
+- cloud3rsio.yumrepo_common
+- cloud3rsio.yumrepo_epel
+- cloud3rsio.yumrepo_remi
+- cloud3rsio.yumrepo_zabbix40
+- cloud3rsio.zabbix40_agent

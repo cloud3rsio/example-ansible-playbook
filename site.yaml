@@ -1,0 +1,55 @@
+---
+- hosts: all
+  roles:
+    - cloud3rsio.yumrepo_common
+    - cloud3rsio.yumrepo_epel
+    - cloud3rsio.yumrepo_remi
+    - cloud3rsio.yumrepo_zabbix40
+    - cloud3rsio.common_packages
+    - cloud3rsio.update_all_packages
+    - role: cloud3rsio.hostname
+      hostname: example.com
+    - cloud3rsio.iptables/disable
+    - cloud3rsio.journald
+    - cloud3rsio.kernel_params
+    - cloud3rsio.logrotate_rules
+    - role: cloud3rsio.os_user
+      name: admin-xxxx
+      password: Passw0rd
+      homedir: /home/admin-xxxx
+      generate_ssh_key: yes
+      additional_ssh_keys: []
+    - cloud3rsio.selinux/disabled
+    - cloud3rsio.swapfile
+    - cloud3rsio.time
+    - role: cloud3rsio.zabbix40_agent
+      zabbix40_agent_UserParameters:
+        - >-
+          redis.status[*],redis-cli info |
+          grep -w "$1" |
+          awk -F':' '{print $$2}'
+      zabbix40_agent_mysql:
+        user: root
+        password: Passw0rd
+        host: 127.0.0.1
+    - cloud3rsio.phpbuild
+    - role: cloud3rsio.php
+      php_version: 7.3.9
+    - role: cloud3rsio.httpd
+      httpd_ServerName: example.com
+      httpd_use_phpfpm_socket:
+        enabled: yes
+        proxy_url: balancer://php7.3.9
+        balancer_member_url: unix:/var/run/php-fpm-7.3.9.sock|fcgi://php7.3.9
+      httpd_use_https: yes
+    - cloud3rsio.proftpd
+    - cloud3rsio.certbot
+  tasks:
+    - name: create index.php
+      lineinfile:
+        path: /var/www/html/index.php
+        line: '<?php phpinfo();?>'
+        create: yes
+        owner: root
+        group: apache
+        mode: 0644
